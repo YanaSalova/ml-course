@@ -1,0 +1,10 @@
+# Игнорировать Jupyter checkpoints
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Игнорировать Python-кеши
+__pycache__/
+*.pyc
+
+# Другие временные файлы
+*.zip
