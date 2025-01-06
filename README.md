@@ -19,19 +19,21 @@
 ---
 
 ## Homework 3. Linear Regression
-1. MSE / R2 metrics
-2. Simple Linear Regression
-3. Linear Regression with Lasso regularization
-
+1) MSE / R2 metrics
+2) Simple Linear Regression
+3) Linear Regression with Lasso regularization
+4) Interpretation
 ---
 
 ## Homework 4. Perceptron
-1. Simpler Perceptron
-2. Pocket Perceptron
-
+1) Simpler perceptron
+2) Pocket Learning Algorithm perceptron
+3) Transform images to vector
+4) Testing on digits dataset from sklearn
 ---
 
 ## Homework 5. Neural Network
-1. Linear, ReLU, Softmax Layers
-2. MLPClassifier
-3. PyTorch CNN for CIFAR10
+1) Linear, ReLU, Softmax Layers
+2) MLPClassifier
+3) Testing on synthetic data
+4) Pytorch CNN for CIFAR10
