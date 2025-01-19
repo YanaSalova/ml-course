@@ -37,3 +37,5 @@
 2) MLPClassifier
 3) Testing on synthetic data
 4) Pytorch CNN for CIFAR10
+
+To be continued...
