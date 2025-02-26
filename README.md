@@ -38,4 +38,11 @@
 3) Testing on synthetic data
 4) Pytorch CNN for CIFAR10
 
+## Homework 6. VAE
+1) Encoder
+2) Decoder
+3) VAE
+
+
+
 To be continued...
