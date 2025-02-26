@@ -43,6 +43,9 @@
 2) Decoder
 3) VAE
 
-
+## Homework 7. SVM
+1) Linear SVM
+2) Kernel functions
+3) Kernel SVM
 
 To be continued...
