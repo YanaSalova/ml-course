@@ -48,4 +48,9 @@
 2) Kernel functions
 3) Kernel SVM
 
+## Homework 8. Decision Tree
+1) Criterions, gain
+2) Decision Tree 
+3) Decision Tree Classifier
+
 To be continued...
