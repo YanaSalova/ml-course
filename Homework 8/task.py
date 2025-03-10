@@ -20,7 +20,7 @@ def entropy(x: np.ndarray) -> float:
     """
     unique, counts = np.unique(x, return_counts = True)
     prob = counts/counts.sum()
-    return -np.sum(prob*np.log(prob, where=(prob>0)))
+    return -np.sum(prob*np.log2(prob, where=(prob>0)))
 
 def gain(left_y: np.ndarray, right_y: np.ndarray, criterion: Callable) -> float:
     """
@@ -140,32 +140,81 @@ class DecisionTreeClassifier:
         self.root=self.build(X,y,depth=0)
 
 
-    def build(self,X,y,depth):
-        if len(X)<=self.min_samples_leaf or len(np.unique(y))==1:
+    def build(self, X, y, depth):
+        if len(X) <= self.min_samples_leaf or len(np.unique(y)) == 1:
             return DecisionTreeLeaf(y)
-        if self.max_depth:
-            if depth==self.max_depth:
-                return DecisionTreeLeaf(y)
-
-        max_gain=-1
+        if self.max_depth is not None and depth == self.max_depth:
+            return DecisionTreeLeaf(y)
+    
+        best_gain = -1
+        best_dim = None
+        best_value = None
+        best_left_idx = None
+        best_right_idx = None
+        parent_impurity = self.criterion(y)
+        n_samples = len(y)
+    
         for dim in range(X.shape[1]):
-            for value in np.unique(X[:,dim]):
-                left=np.where(X[:,dim]<value)
-                right=np.where(X[:,dim]>=value)
-                curr_gain=gain(y[left],y[right],self.criterion)
-                _min_samples_leaf = min(len(y[left]), len(y[right]))
-                if curr_gain>max_gain and _min_samples_leaf >= self.min_samples_leaf:
-                    max_gain=curr_gain
-                    split_dim=dim
-                    split_value=value
-                    best_left=left
-                    best_right=right
-        if max_gain==-1:
-            return DecisionTreeLeaf(y)    
-        left_tree=self.build(X[best_left], y[best_left],depth+1)
-        right_tree=self.build(X[best_right], y[best_right], depth+1)
-        return DecisionTreeNode(split_dim,split_value,left_tree, right_tree)
+            sorted_idx = np.argsort(X[:, dim])
+            sorted_X = X[sorted_idx, dim]
+            sorted_y = y[sorted_idx]
+    
+            candidate_indices = np.where(np.diff(sorted_X) != 0)[0] + 1
+            if len(candidate_indices) == 0:
+                continue
+    
 
+            classes, inv = np.unique(sorted_y, return_inverse=True)
+            n_classes = len(classes)
+    
+            onehot = np.zeros((len(sorted_y), n_classes), dtype=float)
+            onehot[np.arange(len(sorted_y)), inv] = 1.0
+           
+            cumsum = onehot.cumsum(axis=0)  # shape: (n_samples, n_classes)
+            total_counts = cumsum[-1, :]
+    
+            left_counts = cumsum[candidate_indices - 1, :] 
+            right_counts = total_counts - left_counts
+            left_n = candidate_indices.astype(float)          
+            right_n = n_samples - left_n
+    
+            
+            left_prob = left_counts / left_n[:, None]
+            right_prob = right_counts / right_n[:, None]
+    
+            
+            if self.criterion == gini:
+                left_impurity = 1 - np.sum(left_prob ** 2, axis=1)
+                right_impurity = 1 - np.sum(right_prob ** 2, axis=1)
+            else:
+                left_impurity = -np.sum(np.where(left_prob > 0, left_prob * np.log2(left_prob), 0), axis=1)
+                right_impurity = -np.sum(np.where(right_prob > 0, right_prob * np.log2(right_prob), 0), axis=1)
+    
+            
+            weighted_impurity = (left_n / n_samples) * left_impurity + (right_n / n_samples) * right_impurity
+            gain_candidates = parent_impurity - weighted_impurity
+    
+           
+            valid = (left_n >= self.min_samples_leaf) & (right_n >= self.min_samples_leaf)
+            gain_candidates[~valid] = -1  # невалидные кандидаты отвергаем
+    
+          
+            idx_best = np.argmax(gain_candidates)
+            if gain_candidates[idx_best] > best_gain:
+                best_gain = gain_candidates[idx_best]
+                best_dim = dim
+                i = candidate_indices[idx_best]
+                best_value = (sorted_X[i - 1] + sorted_X[i]) / 2.0
+                best_left_idx = X[:, dim] < best_value
+                best_right_idx = X[:, dim] >= best_value
+    
+        if best_gain == -1 or best_dim is None:
+            return DecisionTreeLeaf(y)
+    
+        left_tree = self.build(X[best_left_idx], y[best_left_idx], depth + 1)
+        right_tree = self.build(X[best_right_idx], y[best_right_idx], depth + 1)
+        return DecisionTreeNode(best_dim, best_value, left_tree, right_tree)
+    
 
     
     def predict_proba(self, X: np.ndarray) ->  List[Dict[Any, float]]:
