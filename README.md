@@ -53,4 +53,8 @@
 2) Decision Tree 
 3) Decision Tree Classifier
 
-To be continued...
+## Homework 9. Random Forest
+1) Decision Tree 
+2) Random Forest
+3) Feature importance (out of bag error)
+4) Catboost
