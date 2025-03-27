@@ -23,6 +23,7 @@
 2) Simple Linear Regression
 3) Linear Regression with Lasso regularization
 4) Interpretation
+
 ---
 
 ## Homework 4. Perceptron
@@ -30,6 +31,7 @@
 2) Pocket Learning Algorithm perceptron
 3) Transform images to vector
 4) Testing on digits dataset from sklearn
+
 ---
 
 ## Homework 5. Neural Network
@@ -38,23 +40,34 @@
 3) Testing on synthetic data
 4) Pytorch CNN for CIFAR10
 
+---
+
 ## Homework 6. VAE
 1) Encoder
 2) Decoder
 3) VAE
+
+---
 
 ## Homework 7. SVM
 1) Linear SVM
 2) Kernel functions
 3) Kernel SVM
 
+---
+
 ## Homework 8. Decision Tree
 1) Criterions, gain
 2) Decision Tree 
 3) Decision Tree Classifier
+
+---
 
 ## Homework 9. Random Forest
 1) Decision Tree 
 2) Random Forest
 3) Feature importance (out of bag error)
 4) Catboost
+
+---
+
