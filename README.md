@@ -71,3 +71,10 @@
 
 ---
 
+## Homework 10. Stochastic stranding and Naive Bayes
+1) HillClimb
+2) Genetic Alghorithm
+3) Bag-of-words
+4) Naive Bayes
+
+---
